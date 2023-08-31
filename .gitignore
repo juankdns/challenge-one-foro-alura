@@ -7,6 +7,8 @@ build/
 package.json
 commitlint.config.js
 .husky
+package-lock.json
+node_modules
 
 ### STS ###
 .apt_generated
