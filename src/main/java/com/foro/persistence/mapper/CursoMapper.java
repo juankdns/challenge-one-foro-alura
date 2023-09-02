@@ -4,7 +4,6 @@ import com.foro.domain.entity.CursoEntity;
 import com.foro.persistence.dto.CursoDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring")
 public interface CursoMapper {
