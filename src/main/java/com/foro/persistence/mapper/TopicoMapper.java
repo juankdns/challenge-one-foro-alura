@@ -5,6 +5,7 @@ import com.foro.persistence.dto.TopicoDto;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValueCheckStrategy;
 
 import java.util.List;
 
@@ -15,8 +16,8 @@ public interface TopicoMapper {
     @Mapping(source = "idCurso", target = "idCurso")
     @Mapping(source = "titulo", target = "titulo")
     @Mapping(source = "mensaje", target = "mensaje")
-    @Mapping(source = "fechaCreacion", target = "fechaCreacion")
-    @Mapping(source = "status", target = "status")
+    @Mapping(source = "fechaCreacion", target = "fechaCreacion", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+    @Mapping(source = "status", target = "status", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(source = "curso", target = "curso")
     @Mapping(source = "respuestas", target = "respuestas")
     TopicoDto toTopicoDto(TopicoEntity topico);

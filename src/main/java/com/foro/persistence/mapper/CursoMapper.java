@@ -21,5 +21,4 @@ public interface CursoMapper {
     @InheritInverseConfiguration
     CursoEntity toCurso(CursoDto cursoDto);
 
-
 }

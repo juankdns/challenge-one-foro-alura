@@ -1,16 +1,16 @@
 package com.foro.api.controller;
 
 import com.foro.domain.service.CursoService;
+import com.foro.exception.NoContentException;
 import com.foro.exception.NotFoundException;
 import com.foro.persistence.dto.CursoDto;
-import com.foro.persistence.repository.CursoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cursos")
@@ -21,7 +21,14 @@ public class CursoController {
 
     @PostMapping
     public ResponseEntity<CursoDto> save(@RequestBody CursoDto cursoDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(cursoService.save(cursoDto));
+        CursoDto curso = cursoService.save(cursoDto);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(curso.id())
+                .toUri();
+
+        return ResponseEntity.created(location).body(curso);
     }
 
     @GetMapping("/{id}")
@@ -31,8 +38,11 @@ public class CursoController {
 
     @GetMapping
     public ResponseEntity<List<CursoDto>> findAll() {
-        List<CursoDto> cursos = cursoService.findAll();
-        return ResponseEntity.status(cursos.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK).body(cursos);
+        try {
+            return ResponseEntity.ok(cursoService.findAll());
+        } catch (NoContentException e) {
+            return ResponseEntity.noContent().build();
+        }
     }
 
     @PutMapping
@@ -40,16 +50,17 @@ public class CursoController {
         try {
             return ResponseEntity.ok(cursoService.update(cursoDto));
         } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        boolean exits = cursoService.existsById(id);
-        if (exits) {
+        try {
             cursoService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.status(exits ? HttpStatus.NO_CONTENT : HttpStatus.NOT_FOUND).build();
     }
 }

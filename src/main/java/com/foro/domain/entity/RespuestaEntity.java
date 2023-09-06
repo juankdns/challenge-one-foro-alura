@@ -1,5 +1,7 @@
 package com.foro.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +35,7 @@ public class RespuestaEntity {
 
     @ManyToOne
     @JoinColumn(name = "id_topico", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonIgnore
     private TopicoEntity topico;
 
 }
