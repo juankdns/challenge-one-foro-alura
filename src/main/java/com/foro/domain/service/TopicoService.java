@@ -10,7 +10,6 @@ import com.foro.persistence.repository.TopicoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +26,10 @@ public class TopicoService {
 
     public Optional<TopicoDto> findById(Long id) {
         return topicoRepository.findById(id).map(topicoMapper::toTopicoDto);
+    }
+
+    public StatusTopico findStatus(Long id) {
+        return topicoRepository.findStatus(id);
     }
 
     public boolean existsById(Long id) {
@@ -50,13 +53,11 @@ public class TopicoService {
             Long idCurso = topicoDto.idCurso();
             String titulo = topicoDto.titulo();
             String mensaje = topicoDto.mensaje();
-            LocalDateTime fechaCreacion = topicoDto.fechaCreacion();
             StatusTopico status = topicoDto.status();
 
-            topico.setIdCurso(idCurso >= 0 ? idCurso : topico.getIdCurso());
+            topico.setIdCurso(idCurso != null && idCurso >= 0 ? idCurso : topico.getIdCurso());
             topico.setTitulo(titulo != null && !titulo.isBlank() ? titulo : topico.getTitulo());
             topico.setMensaje(mensaje != null && !mensaje.isBlank() ? mensaje : topico.getMensaje());
-            topico.setFechaCreacion(fechaCreacion != null ? fechaCreacion : topico.getFechaCreacion());
             topico.setStatus(status != null ? status : topico.getStatus());
 
             return topicoMapper.toTopicoDto(topicoRepository.save(topico));

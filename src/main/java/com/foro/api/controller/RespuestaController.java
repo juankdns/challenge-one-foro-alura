@@ -5,8 +5,11 @@ import com.foro.domain.service.RespuestaService;
 import com.foro.exception.NoContentException;
 import com.foro.exception.NotFoundException;
 import com.foro.persistence.dto.RespuestaDto;
+import com.foro.validator.SaveValidator;
+import com.foro.validator.UpdateValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -21,7 +24,7 @@ public class RespuestaController {
     private final RespuestaService respuestaService;
 
     @PostMapping
-    public ResponseEntity<RespuestaDto> save(@RequestBody RespuestaDto respuestaDto) {
+    public ResponseEntity<RespuestaDto> save(@Validated(SaveValidator.class) @RequestBody RespuestaDto respuestaDto) {
         RespuestaDto respuesta = respuestaService.save(respuestaDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -47,7 +50,7 @@ public class RespuestaController {
     }
 
     @PutMapping
-    public ResponseEntity<RespuestaDto> update(@RequestBody RespuestaDto respuestaDto) {
+    public ResponseEntity<RespuestaDto> update(@Validated(UpdateValidator.class) @RequestBody RespuestaDto respuestaDto) {
         try {
             return ResponseEntity.ok(respuestaService.update(respuestaDto));
         } catch (NotFoundException e) {

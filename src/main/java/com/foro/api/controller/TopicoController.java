@@ -1,13 +1,14 @@
 package com.foro.api.controller;
 
-import com.foro.domain.entity.TopicoEntity;
 import com.foro.domain.service.TopicoService;
 import com.foro.exception.NoContentException;
 import com.foro.exception.NotFoundException;
-import com.foro.persistence.dto.CursoDto;
 import com.foro.persistence.dto.TopicoDto;
+import com.foro.validator.SaveValidator;
+import com.foro.validator.UpdateValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,7 +23,7 @@ public class TopicoController {
     private final TopicoService topicoService;
 
     @PostMapping
-    public ResponseEntity<TopicoDto> save(@RequestBody TopicoDto topicoDto) {
+    public ResponseEntity<TopicoDto> save(@Validated(SaveValidator.class) @RequestBody TopicoDto topicoDto) {
         TopicoDto topico = topicoService.save(topicoDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -48,7 +49,7 @@ public class TopicoController {
     }
 
     @PutMapping
-    public ResponseEntity<TopicoDto> update(@RequestBody TopicoDto topicoDto) {
+    public ResponseEntity<TopicoDto> update(@Validated(UpdateValidator.class) @RequestBody TopicoDto topicoDto) {
         try {
             return ResponseEntity.ok(topicoService.update(topicoDto));
         } catch (NotFoundException e) {

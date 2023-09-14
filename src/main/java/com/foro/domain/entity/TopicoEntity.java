@@ -26,10 +26,10 @@ public class TopicoEntity {
     @Column(name = "id_curso", nullable = false)
     private Long idCurso;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String titulo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String mensaje;
 
     @Column(name = "fecha_creacion", nullable = false, columnDefinition = "DATETIME")
