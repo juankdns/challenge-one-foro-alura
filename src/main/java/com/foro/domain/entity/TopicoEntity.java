@@ -1,5 +1,7 @@
 package com.foro.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.foro.domain.StatusTopico;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,10 +26,10 @@ public class TopicoEntity {
     @Column(name = "id_curso", nullable = false)
     private Long idCurso;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String titulo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String mensaje;
 
     @Column(name = "fecha_creacion", nullable = false, columnDefinition = "DATETIME")
@@ -39,8 +41,11 @@ public class TopicoEntity {
 
     @ManyToOne
     @JoinColumn(name = "id_curso", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonIgnore
     private CursoEntity curso;
 
-    @OneToMany(mappedBy = "topico")
+    @OneToMany(mappedBy = "topico", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JsonManagedReference
     private List<RespuestaEntity> respuestas;
 }
